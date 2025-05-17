@@ -12,6 +12,7 @@ function App() {
   return (
     <Layout>
       <Routes>
+      <Route path="/" element={<LabRegistrationForm />} />
         <Route path="/add-lab" element={<LabRegistrationForm />} />
         <Route path="/all-labs" element={<Labs />} />
         <Route path="/payment" element={<Payment />} />
