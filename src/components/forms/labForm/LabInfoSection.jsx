@@ -1,11 +1,8 @@
 import React from 'react';
 
 const LabInfoSection = ({ formData, handleChange }) => (
-  <div className="bg-gray-50 p-6 rounded-xl">
-    <h3 className="text-xl font-semibold text-gray-700 mb-4 pb-2 border-b border-gray-200">
-      Lab Information
-    </h3>
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+  <div className="bg-gray-50 py-4 px-6 rounded-xl">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       <div>
         <label className="block text-sm font-medium text-gray-600 mb-1">
           Lab Name <span className="text-red-500">*</span>
@@ -20,6 +17,7 @@ const LabInfoSection = ({ formData, handleChange }) => (
           placeholder="Enter lab name"
         />
       </div>
+
       <div>
         <label className="block text-sm font-medium text-gray-600 mb-1">
           Location <span className="text-red-500">*</span>
@@ -34,7 +32,8 @@ const LabInfoSection = ({ formData, handleChange }) => (
           placeholder="City"
         />
       </div>
-      <div className="md:col-span-2">
+
+      <div>
         <label className="block text-sm font-medium text-gray-600 mb-1">
           Address <span className="text-red-500">*</span>
         </label>

@@ -1,10 +1,7 @@
 import React from 'react';
 
 const PricingSection = ({ formData, handleChange }) => (
-  <div className="bg-gray-50 p-6 rounded-xl">
-    <h3 className="text-xl font-semibold text-gray-700 mb-4 pb-2 border-b border-gray-200">
-      Pricing
-    </h3>
+  <div className="bg-gray-50 py-4 px-6 rounded-xl">
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div className="md:col-span-2">
         <label className="block text-sm font-medium text-gray-600 mb-1">
@@ -16,6 +13,7 @@ const PricingSection = ({ formData, handleChange }) => (
               type="radio"
               name="pricingType"
               value="perInvoice"
+              required
               checked={formData.pricingType === "perInvoice"}
               onChange={handleChange}
               className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
@@ -27,6 +25,7 @@ const PricingSection = ({ formData, handleChange }) => (
               type="radio"
               name="pricingType"
               value="monthly"
+              required
               checked={formData.pricingType === "monthly"}
               onChange={handleChange}
               className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
@@ -47,6 +46,7 @@ const PricingSection = ({ formData, handleChange }) => (
               <input
                 type="text"
                 name="priceInvoice"
+                required
                 value={formData.priceInvoice}
                 onChange={handleChange}
                 className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
@@ -56,20 +56,20 @@ const PricingSection = ({ formData, handleChange }) => (
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-600 mb-1">
-              Lab Commission (%)
+              Lab Commission
             </label>
             <div className="relative">
               <input
                 type="number"
                 name="commission"
                 value={formData.commission}
+                required
                 onChange={handleChange}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                 placeholder="0-100"
                 min="0"
                 max="100"
               />
-              <span className="absolute right-3 top-3 text-gray-400">%</span>
             </div>
           </div>
         </>
@@ -84,6 +84,7 @@ const PricingSection = ({ formData, handleChange }) => (
               type="text"
               name="monthlyPayment"
               value={formData.monthlyPayment}
+              required
               onChange={handleChange}
               className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
               placeholder="Enter monthly payment amount"

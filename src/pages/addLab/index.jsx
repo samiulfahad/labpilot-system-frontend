@@ -9,6 +9,7 @@ const AddLab = () => {
 
   const handleSubmit = async (labData) => {
     try {
+      console.log(labData)
       setStatus("processing")
       setMsg("Submitting Data....")
       const response = await api.post('/v1/system/add/lab', labData)
@@ -33,12 +34,21 @@ const AddLab = () => {
     setMsg("")
   }
 
+  const handleStatus = status => {
+    setStatus(status)
+  }
+
+  const handleMsg = msg => {
+    console.log(msg)
+    setMsg(msg)
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center">
       {status === "processing" && <Modal type="processing" title={msg} />}
-      {status === "error" && <Modal type="error" onClose={closeModal} />}
+      {status === "error" && <Modal type="error" title={msg} onClose={closeModal} />}
       {status === "success" && <Modal type="success" onCloFse={closeModal} />}
-      <LabFormPublic onSubmit={handleSubmit} />
+      <LabFormPublic onSubmit={handleSubmit} setStatus={handleStatus} setMsg={handleMsg} />
     </div>
   );
 };

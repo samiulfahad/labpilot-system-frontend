@@ -36,36 +36,16 @@ const LabList = ({ labs, onViewLab, onEditLab, onEditOwner, onManageUsers, onTog
                 onClick={() => onViewLab(lab.id)}
                 className="px-4 py-2 text-sm text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-all"
               >
-                View Details
+                Details
               </button>
-              <button
-                onClick={() => onEditLab(lab.id)}
-                className="px-4 py-2 text-sm text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-all"
-              >
-                Edit Private Info
-              </button>
-              <button
-                onClick={() => onEditOwner(lab.id)}
-                className="px-4 py-2 text-sm text-white bg-purple-600 rounded-lg hover:bg-purple-700 transition-all"
-              >
-                Edit Public Info
-              </button>
+            
               <button
                 onClick={() => onManageUsers(lab.id)}
                 className="px-4 py-2 text-sm text-white bg-yellow-600 rounded-lg hover:bg-yellow-700 transition-all"
               >
                 Manage Users
               </button>
-              {/* <button
-                onClick={() => onToggleStatus(lab.id)}
-                className={`col-span-2 px-4 py-2 text-sm text-white rounded-lg transition-all ${
-                  lab.isActive
-                    ? "bg-red-600 hover:bg-red-700"
-                    : "bg-green-600 hover:bg-green-700"
-                }`}
-              >
-                {lab.isActive ? "Deactivate" : "Activate"}
-              </button> */}
+            
             </div>
           </div>
         ))}

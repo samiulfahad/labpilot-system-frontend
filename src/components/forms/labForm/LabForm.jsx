@@ -3,10 +3,9 @@ import LabInfoSection from "./LabInfoSection";
 import ContactSection from "./ContactSection";
 import PricingSection from "./PricingSection";
 import BusinessSection from "./BusinessSection";
-import FormActions from "./FormActions";
 import ActiveStatusSection from "./ActiveStatusSection";
 
-const LabForm = ({ initialData, onSubmit }) => {
+const LabForm = ({ initialData, onSubmit, setStatus, setMsg }) => {
   const [formData, setFormData] = useState({
     labName: "",
     location: "",
@@ -18,7 +17,7 @@ const LabForm = ({ initialData, onSubmit }) => {
     priceInvoice: "",
     monthlyPayment: "",
     commission: "",
-    isActive: "YES",
+    isActive: true,
     tradeLicenseInfo: "",
     businessRegistrationInfo: ""
   });
@@ -27,7 +26,14 @@ const LabForm = ({ initialData, onSubmit }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    let { name, value } = e.target;
+    if(name === 'isActive') {
+      if (value === "true") {
+        value = true
+      } else {
+        value = false
+      }
+    }
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
@@ -55,21 +61,63 @@ const LabForm = ({ initialData, onSubmit }) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    if (!formData.labName || !formData.location || !formData.address || 
-        !formData.primaryPhoneNumber || !formData.emailAddress) {
-      setMessage({ text: "Please fill in all required fields.", type: "error" });
+    const requiredFields = {
+      labName: "Lab Name",
+      location: "Location",
+      address: "Address",
+      primaryPhoneNumber: "Primary Phone Number",
+      emailAddress: "Email Address"
+    };
+
+    const missingFields = Object.keys(requiredFields).filter(
+      (key) => !formData[key]
+    );
+
+    if (missingFields.length > 0) {
+      const missingFieldNames = missingFields.map(
+        (key) => requiredFields[key]
+      ).join(", ");
+      const errorMessage = `Please fill in the following fields: ${missingFieldNames}.`;
+
+      setMsg(errorMessage);
+      setStatus("error");
+      setMessage({ text: errorMessage, type: "error" });
       setIsSubmitting(false);
       return;
     }
 
     if (formData.pricingType === "perInvoice" && !formData.priceInvoice) {
-      setMessage({ text: "Please enter the price per invoice.", type: "error" });
+      const errorMessage = "Please enter the price per invoice.";
+      setMessage({ text: errorMessage, type: "error" });
+      setMsg("Please enter the price per invoice");
+      setStatus("error");
       setIsSubmitting(false);
       return;
     }
 
+
+
     if (formData.pricingType === "monthly" && !formData.monthlyPayment) {
-      setMessage({ text: "Please enter the monthly payment amount.", type: "error" });
+      const errorMessage = "Please enter the monthly payment amount";
+      setMessage({ text: errorMessage, type: "error" });
+      setMsg("Please enter the monthly payment amount");
+      setStatus("error");
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (formData.pricingType === "perInvoice" && !formData.commission) {
+      const errorMessage = "Please enter Lab Commission per Invoice.";
+      setMessage({ text: errorMessage, type: "error" });
+      setMsg("Please enter Lab Commission per Invoice");
+      setStatus("error");
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (formData.pricingType === "perInvoice" && (parseFloat(formData.commission) > parseFloat(formData.priceInvoice))) {
+      setMsg("Lab commission can't be greater than Price per invoice");
+      setStatus("error");
       setIsSubmitting(false);
       return;
     }
@@ -95,29 +143,31 @@ const LabForm = ({ initialData, onSubmit }) => {
         });
       }
 
-      setMessage({
-        text: initialData ? "Lab updated successfully!" : "Lab registration submitted!",
-        type: "success"
-      });
+      const successMessage = initialData
+        ? "Lab updated successfully!"
+        : "Lab registration submitted!";
+
+      setMessage({ text: successMessage, type: "success" });
+      setMsg(successMessage);
+      setStatus("success");
     } catch (error) {
-      setMessage({
-        text: initialData ? "Update failed. Please try again." : "Submission failed. Please try again.",
-        type: "error"
-      });
+      const errorMessage = initialData
+        ? "Update failed. Please try again."
+        : "Submission failed. Please try again.";
+      setMessage({ text: errorMessage, type: "error" });
+      setMsg(errorMessage);
+      setStatus("error");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white rounded-2xl shadow-xl">
+    <div className="w-full mx-auto p-6 bg-white rounded-2xl shadow-xl">
       <div className="mb-8 text-center">
         <h2 className="text-3xl font-bold text-gray-800">
           {initialData ? "Edit Lab Details" : "Register New Lab"}
         </h2>
-        <p className="mt-2 text-gray-600">
-          {initialData ? "Update the lab information below" : "Fill in the lab details to register"}
-        </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-8">
@@ -126,11 +176,17 @@ const LabForm = ({ initialData, onSubmit }) => {
         <PricingSection formData={formData} handleChange={handleChange} />
         <BusinessSection formData={formData} handleChange={handleChange} />
         <ActiveStatusSection formData={formData} handleChange={handleChange} />
-        <FormActions 
-          isSubmitting={isSubmitting} 
-          message={message} 
-          isEditMode={!!initialData} 
-        />
+        <div className="flex flex-col sm:flex-row justify-end gap-4">
+
+          <button
+            type="submit"
+            className="btn-md"
+          >
+            {
+              initialData ? "Update Lab" : "Register Lab"
+            }
+          </button>
+        </div>
       </form>
     </div>
   );
