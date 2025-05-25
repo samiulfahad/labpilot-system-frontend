@@ -25,7 +25,7 @@ const AddLab = () => {
     } catch (e) {
       setStatus("error")
       setMsg("Something went wrong. Check console for details")
-      console.log(response.data)
+      console.log(e)
     }
   };
 

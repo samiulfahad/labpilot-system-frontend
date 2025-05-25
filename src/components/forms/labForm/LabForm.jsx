@@ -22,12 +22,9 @@ const LabForm = ({ initialData, onSubmit, setStatus, setMsg }) => {
     businessRegistrationInfo: ""
   });
 
-  const [message, setMessage] = useState({ text: "", type: "" });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
   const handleChange = (e) => {
     let { name, value } = e.target;
-    if(name === 'isActive') {
+    if (name === 'isActive') {
       if (value === "true") {
         value = true
       } else {
@@ -59,7 +56,6 @@ const LabForm = ({ initialData, onSubmit, setStatus, setMsg }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
 
     const requiredFields = {
       labName: "Lab Name",
@@ -81,85 +77,36 @@ const LabForm = ({ initialData, onSubmit, setStatus, setMsg }) => {
 
       setMsg(errorMessage);
       setStatus("error");
-      setMessage({ text: errorMessage, type: "error" });
-      setIsSubmitting(false);
       return;
     }
 
     if (formData.pricingType === "perInvoice" && !formData.priceInvoice) {
-      const errorMessage = "Please enter the price per invoice.";
-      setMessage({ text: errorMessage, type: "error" });
-      setMsg("Please enter the price per invoice");
+      setMsg("Please enter the Price per invoice");
       setStatus("error");
-      setIsSubmitting(false);
       return;
     }
 
 
 
     if (formData.pricingType === "monthly" && !formData.monthlyPayment) {
-      const errorMessage = "Please enter the monthly payment amount";
-      setMessage({ text: errorMessage, type: "error" });
       setMsg("Please enter the monthly payment amount");
       setStatus("error");
-      setIsSubmitting(false);
       return;
     }
 
     if (formData.pricingType === "perInvoice" && !formData.commission) {
-      const errorMessage = "Please enter Lab Commission per Invoice.";
-      setMessage({ text: errorMessage, type: "error" });
       setMsg("Please enter Lab Commission per Invoice");
       setStatus("error");
-      setIsSubmitting(false);
       return;
     }
 
     if (formData.pricingType === "perInvoice" && (parseFloat(formData.commission) > parseFloat(formData.priceInvoice))) {
-      setMsg("Lab commission can't be greater than Price per invoice");
+      setMsg("Lab Commission can't be greater than Price per invoice");
       setStatus("error");
-      setIsSubmitting(false);
       return;
     }
 
-    try {
-      await onSubmit(formData);
-
-      if (!initialData) {
-        setFormData({
-          labName: "",
-          location: "",
-          address: "",
-          primaryPhoneNumber: "",
-          secondaryPhoneNumber: "",
-          emailAddress: "",
-          pricingType: "perInvoice",
-          priceInvoice: "",
-          monthlyPayment: "",
-          commission: "",
-          isActive: "YES",
-          tradeLicenseInfo: "",
-          businessRegistrationInfo: ""
-        });
-      }
-
-      const successMessage = initialData
-        ? "Lab updated successfully!"
-        : "Lab registration submitted!";
-
-      setMessage({ text: successMessage, type: "success" });
-      setMsg(successMessage);
-      setStatus("success");
-    } catch (error) {
-      const errorMessage = initialData
-        ? "Update failed. Please try again."
-        : "Submission failed. Please try again.";
-      setMessage({ text: errorMessage, type: "error" });
-      setMsg(errorMessage);
-      setStatus("error");
-    } finally {
-      setIsSubmitting(false);
-    }
+    onSubmit(formData)
   };
 
   return (
